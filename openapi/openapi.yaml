@@ -1,0 +1,147 @@
+openapi: 3.0.3
+info:
+  title: Newsletter Suioip API
+  version: "0.1.0"
+  description: >
+    API REST du back-office Newsletter Suioip (Smart Mailer Pro open source).
+    Sprint v0.1 : Authentification (Locale / CAS / LDAP), Gestion des utilisateurs, Dashboard.
+servers:
+  - url: /api
+security:
+  - sanctum: []
+tags:
+  - name: Auth
+  - name: Auth - CAS
+  - name: Auth - LDAP
+  - name: Users
+  - name: Dashboard
+paths:
+  /v1/auth/login:
+    post:
+      tags: [Auth]
+      summary: Connexion locale (email + mot de passe)
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [email, password]
+              properties:
+                email: { type: string, format: email }
+                password: { type: string, format: password }
+                device_name: { type: string }
+      responses:
+        "200": { description: Connexion réussie }
+        "422": { description: Identifiants invalides }
+  /v1/auth/logout:
+    post:
+      tags: [Auth]
+      summary: Révoque le token courant
+      responses:
+        "204": { description: Déconnexion réussie }
+  /v1/auth/me:
+    get:
+      tags: [Auth]
+      summary: Utilisateur courant
+      responses:
+        "200": { description: Utilisateur courant }
+  /v1/auth/cas/login:
+    get:
+      tags: [Auth - CAS]
+      summary: Redirige vers le CAS, valide le ticket, provisionne l'utilisateur
+      security: []
+      responses:
+        "200": { description: Connexion CAS réussie }
+        "503": { description: CAS désactivé }
+  /v1/auth/ldap/login:
+    post:
+      tags: [Auth - LDAP]
+      summary: Bind LDAP puis provisioning local (JIT)
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [username, password]
+              properties:
+                username: { type: string }
+                password: { type: string, format: password }
+      responses:
+        "200": { description: Connexion LDAP réussie }
+        "422": { description: Identifiants invalides }
+        "503": { description: LDAP désactivé }
+  /v1/users:
+    get:
+      tags: [Users]
+      summary: Liste paginée des utilisateurs
+      parameters:
+        - in: query
+          name: search
+          schema: { type: string }
+        - in: query
+          name: per_page
+          schema: { type: integer, default: 15 }
+      responses:
+        "200": { description: Liste des utilisateurs }
+    post:
+      tags: [Users]
+      summary: Crée un utilisateur
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [name, email]
+              properties:
+                name: { type: string }
+                email: { type: string, format: email }
+                password: { type: string }
+                roles:
+                  type: array
+                  items: { type: string }
+                active: { type: boolean }
+      responses:
+        "201": { description: Utilisateur créé }
+        "422": { description: Validation / email déjà utilisé }
+  /v1/users/{user}:
+    parameters:
+      - in: path
+        name: user
+        required: true
+        schema: { type: integer }
+    get:
+      tags: [Users]
+      summary: Détail d'un utilisateur
+      responses:
+        "200": { description: Utilisateur }
+        "404": { description: Introuvable }
+    put:
+      tags: [Users]
+      summary: Met à jour un utilisateur
+      responses:
+        "200": { description: Utilisateur mis à jour }
+        "404": { description: Introuvable }
+        "422": { description: Validation }
+    delete:
+      tags: [Users]
+      summary: Supprime (soft delete) un utilisateur
+      responses:
+        "204": { description: Supprimé }
+        "404": { description: Introuvable }
+  /v1/dashboard/stats:
+    get:
+      tags: [Dashboard]
+      summary: Statistiques globales du back-office
+      responses:
+        "200": { description: Statistiques }
+components:
+  securitySchemes:
+    sanctum:
+      type: http
+      scheme: bearer
+      bearerFormat: API Token

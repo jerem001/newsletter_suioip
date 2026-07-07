@@ -1,0 +1,11 @@
+{
+    "name": "Dashboard",
+    "alias": "dashboard",
+    "description": "Tableau de bord et indicateurs globaux du back-office.",
+    "keywords": ["dashboard", "stats"],
+    "priority": 3,
+    "providers": [
+        "Modules\\Dashboard\\Infrastructure\\Providers\\DashboardServiceProvider"
+    ],
+    "files": []
+}

@@ -1,0 +1,11 @@
+{
+    "name": "Auth",
+    "alias": "auth",
+    "description": "Authentification multi-stratégie : Locale, CAS (SSO) et LDAP/Active Directory.",
+    "keywords": ["auth", "cas", "ldap", "sanctum"],
+    "priority": 1,
+    "providers": [
+        "Modules\\Auth\\Infrastructure\\Providers\\AuthServiceProvider"
+    ],
+    "files": []
+}
