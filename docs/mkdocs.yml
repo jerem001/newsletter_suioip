@@ -1,0 +1,29 @@
+site_name: Newsletter Suioip — Documentation
+site_description: Smart Mailer Pro open source — architecture DDD/hexagonale sur Laravel 12
+repo_url: https://github.com/jerem001/newsletter_suioip
+theme:
+  name: material
+  language: fr
+  palette:
+    - scheme: default
+      primary: indigo
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - content.code.copy
+
+nav:
+  - Accueil: index.md
+  - Démarrage rapide: getting-started.md
+  - Architecture: architecture.md
+  - Authentification: auth.md
+  - API (OpenAPI): api.md
+  - Contribuer: contributing.md
+  - Changelog: changelog.md
+
+markdown_extensions:
+  - admonition
+  - pymdownx.superfences
+  - pymdownx.tabbed
+  - toc:
+      permalink: true

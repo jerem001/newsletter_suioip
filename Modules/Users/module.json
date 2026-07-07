@@ -1,0 +1,11 @@
+{
+    "name": "Users",
+    "alias": "users",
+    "description": "Gestion des utilisateurs, rôles et permissions du back-office.",
+    "keywords": ["users", "rbac", "permissions"],
+    "priority": 2,
+    "providers": [
+        "Modules\\Users\\Infrastructure\\Providers\\UsersServiceProvider"
+    ],
+    "files": []
+}
